@@ -1,0 +1,39 @@
+public class Main {
+    // tworzę wartości początkowe
+    static int licza_przedmiotow = 6;
+    static int obj_plecaka = 10;
+    static int[] obj_przedm = {7, 9, 2, 5, 1, 3};
+    static int[] wartosc_przedm = {8, 3, 6, 1, 7, 4};
+
+
+    static int maxWartoscPlecaka(int lPrzedmiotow, int maxObjetosc) {
+        int dodatkowa[][] = new int[lPrzedmiotow + 1][maxObjetosc + 1]; //  pomocnicza tablica
+
+        for (int i = 0; i <= lPrzedmiotow; i++) { // teraz wypełniam wiersze i kolumny macierzy zerami.
+            dodatkowa[i][0] = 0;
+        }
+        for (int i = 0; i <= maxObjetosc; i++) {
+            dodatkowa[0][i] = 0;  /*uzyskiwanie kolejnych rozwiązań za pomocą poprzednich
+            (zaczynając od przypadku gdy mamy do dyspozycji tylko pierwszy przedmiot):*/
+        }
+
+
+// Poprzez pętle otrzymuję kolejne rozwiązania
+        for (int i = 1; i <= lPrzedmiotow; i++) { // zaczynam od sytuacji gdy mam tylko jeden przedmiot
+            for (int j = 1; j <= maxObjetosc; j++) {
+                if (obj_przedm[i - 1] <= j) {   // warunek czy pakujemy przedmiot do plecaka
+                    dodatkowa[i][j] = Math.max(wartosc_przedm[i - 1] + dodatkowa[i - 1][j - obj_przedm[i - 1]], dodatkowa[i - 1][j]);
+                } else {
+                    dodatkowa[i][j] = dodatkowa[i - 1][j];// ta sama wartość co dla o 1 mniejszej liczby przedmiotów
+                }
+            }
+        }
+        return dodatkowa[lPrzedmiotow][maxObjetosc]; // zwraca
+    }
+// przechodząc do wywołania funkcji w mainie otrzymujemy:
+    public static void main(String[] args) {
+        System.out.println("Maksymalna wartość plecaka: " + maxWartoscPlecaka(licza_przedmiotow, obj_plecaka));
+    }
+
+}
+
